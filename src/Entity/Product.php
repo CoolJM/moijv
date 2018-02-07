@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\Table;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
@@ -48,6 +50,37 @@ class Product
      */
     private $user;
     
+    /**
+     *@ORM\ManyToMany(targetEntity="Tag", mappedBy="products")
+     * @var Collection
+     */
+    private $tags;
+    
+    public function __construct() {
+        $this->tags = new ArrayCollection();
+    }
+    
+    
+    public function addTag($tag){
+        if($this->getTags()->contains($tag)) {
+            return;
+        }
+                $this->getTags()->add($tag);
+                $tag->getProducts()->add($this);
+    }
+
+    
+    public function getTags(): Collection {
+        return $this->tags;
+    }
+
+    public function setTags(Collection $tags) {
+        $this->tags = $tags;
+        return $this;
+    }
+
+      
+
     public function getId() {
         return $this->id;
     }
