@@ -44,6 +44,7 @@ class LoanController extends Controller
             // enregistrement du produit
             $manager->persist($product);
             $manager->flush();
+            return $this->redirectToRoute('my_products');//redirection sur la liste des produits après l'enregistrement d'un produit
             
         }
         
@@ -60,7 +61,6 @@ class LoanController extends Controller
     public function myProducts(){
        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour accéder à cette page');
        
-       $product = new Product();
        
        
        return $this->render('my_products.html.twig');
